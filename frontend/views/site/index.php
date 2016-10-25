@@ -8,7 +8,6 @@ use common\models\Template;
 
 $this->title = 'My Yii Application';
 
-//$isWaiting = Yii::$app->session->getFlash('waitingForDownload');
 if( Yii::$app->session->hasFlash(Template::FLASH_DOWNLOAD_TRIGGER) )
 {
     $this->registerJs('
