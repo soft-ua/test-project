@@ -30,19 +30,22 @@ class PaymentController extends Controller {
 
     private $apiContext = false;
 
+    const CURRENCY = 'USD';
+
     function actionPay($templateId){
-        $description = 'Buy Template #' . $templateId;
-        $price = '22.00';
-        $currency = 'USD';
-        $returnUrl = Yii::$app->urlManager->createAbsoluteUrl('payment/success');
-        $cancelUrl = Yii::$app->urlManager->createAbsoluteUrl('payment/cancel');
+        $template = Template::findOne($templateId);
+        if(!empty($template)) {
+            $description = 'Buy Template #' . $template->id;
+            $price = $template->price;
+            $returnUrl = Yii::$app->urlManager->createAbsoluteUrl('payment/success');
+            $cancelUrl = Yii::$app->urlManager->createAbsoluteUrl('payment/cancel');
 
-        if( ! Yii::$app->user->isGuest ) {
-            $this->makePayment($templateId, $price, $currency, $description, $returnUrl, $cancelUrl);
-        }
-        else{
+            if (!Yii::$app->user->isGuest) {
+                $this->makePayment($template->id, $price, self::CURRENCY, $description, $returnUrl, $cancelUrl);
+            } else {
 
-            $this->redirect('/site/login');
+                $this->redirect('/site/login');
+            }
         }
     }
 
